@@ -1,13 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Mono:wght@500&family=Onest:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-onest: 'Onest', sans-serif;
   --font-inter: 'Inter', sans-serif;
   --font-mono: 'Noto Sans Mono', monospace;
-  --font-satoshi: 'Satoshi', sans-serif;
-  
+  --font-satoshi: 'Satoshi', 'Onest', sans-serif;
+
   --color-primary: #2463eb;
-  --color-primary-light: rgba(36, 99, 235, 0.05);
+  --color-primary-light: rgba(36, 99, 235, 0.08);
   --color-dark: #1a1c1d;
   --color-gray-text: rgba(0, 0, 0, 0.6);
   --color-border: rgba(0, 0, 0, 0.1);
@@ -15,24 +16,52 @@
 }
 
 @layer base {
+  :root {
+    --color-primary: #2463eb;
+    --color-primary-soft: rgba(36, 99, 235, 0.08);
+    --color-primary-strong: rgba(36, 99, 235, 0.18);
+    --color-ink: #1a1c1d;
+    --color-muted: rgba(26, 28, 29, 0.58);
+    --color-surface-muted: rgba(26, 28, 29, 0.035);
+    --color-border-soft: rgba(0, 0, 0, 0.08);
+  }
+
   * {
+    box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     font-family: var(--font-onest);
     background-color: #ffffff;
+    color: var(--color-ink);
     margin: 0;
     padding: 0;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: rgba(36, 99, 235, 0.16);
   }
 }
 
-/* Pulse animation for availability dot */
+/* ── Keyframes ──────────────────────────────────── */
+
 @keyframes pulse-green {
   0%, 100% {
     transform: scale(1);
@@ -48,7 +77,8 @@
   animation: pulse-green 2s ease-in-out infinite;
 }
 
-/* Grid background pattern */
+/* ── Grid Background ────────────────────────────── */
+
 .grid-bg {
   background-image: 
     linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
@@ -56,20 +86,77 @@
   background-size: 40px 40px;
 }
 
-/* Gradient glow effects */
-.glow-left {
-  background: radial-gradient(ellipse at left center, rgba(36, 99, 235, 0.08), transparent 60%);
+/* ── Marquee / Travel Strip ─────────────────────── */
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.glow-right {
-  background: radial-gradient(ellipse at right center, rgba(36, 99, 235, 0.08), transparent 60%);
+.marquee-track {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
 }
 
-/* Custom scrollbar hiding */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+.marquee-strip {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marquee-x 34s linear infinite;
 }
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.marquee-track:hover .marquee-strip {
+  animation-play-state: paused;
+}
+
+/* ── Travel Card ────────────────────────────────── */
+
+.travel-card {
+  width: 220px;
+  flex: none;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: white;
+  box-shadow: 0 18px 40px rgba(26, 28, 29, 0.07);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.travel-card__image {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  object-fit: cover;
+}
+
+.travel-card__label {
+  padding: 16px 18px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: var(--color-ink);
+}
+
+/* ── Responsive Adjustments ─────────────────────── */
+
+@media (max-width: 809px) {
+  .marquee-strip {
+    animation-duration: 26s;
+    gap: 16px;
+  }
+
+  .travel-card {
+    width: 180px;
+    border-radius: 24px;
+  }
+
+  .travel-card__label {
+    font-size: 0.92rem;
+    padding: 14px 14px 16px;
+  }
 }
